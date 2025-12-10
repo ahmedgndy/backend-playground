@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f3f2ef;
+            padding: 20px
+        }
+
+        .header {
+            background: #fff;
+            padding: 15px 30px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-radius: 8px
+        }
+
+        .header h1 {
+            color: #0a66c2;
+            font-size: 24px
+        }
+
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+            padding: 10px
+        }
+
+        .bell-icon {
+            width: 30px;
+            height: 30px;
+            background: #666;
+            -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z'/%3E%3C/svg%3E") no-repeat center;
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.63-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-2 1H8v-6c0-2.48 1.51-4.5 4-4.5s4 2.02 4 4.5v6z'/%3E%3C/svg%3E") no-repeat center
+        }
+
+        .notification-count {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: #e13B2F;
+            color: #fff;
+            border-radius: 50%;
+            min-width: 20px;
+            height: 20px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold
+        }
+
+        .notification-count.visible {
+            display: flex
+        }
+
+        #status {
+            padding: 10px 20px;
+            background: #fff;
+            border-radius: 5px;
+            font-size: 14px
+        }
+
+        .connected {
+            color: #057642
+        }
+
+        .disconnected {
+            color: #cc1016
+        }
+
+        .notifications-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+            overflow: hidden
+        }
+
+        .notifications-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 20px;
+            font-weight: 600
+        }
+
+        .notifications-list {
+            max-height: 600px;
+            overflow-y: auto
+        }
+
+        .notification-item {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background .2s;
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px
+        }
+
+        .notification-item:hover {
+            background: #f8f8f8
+        }
+
+        .notification-item.unread {
+            background: #f3f6f8
+        }
+
+        .notification-item.unread::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #0a66c2
+        }
+
+        .notification-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-weight: bold;
+            font-size: 20px;
+            flex-shrink: 0
+        }
+
+        .notification-content {
+            flex: 1
+        }
+
+        .notification-text {
+            font-size: 14px;
+            line-height: 1.5;
+            margin-bottom: 4px
+        }
+
+        .notification-time {
+            color: #666;
+            font-size: 12px
+        }
+
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            background: #0a66c2;
+            border-radius: 50%;
+            flex-shrink: 0;
+            margin-top: 8px;
+            display: none
+        }
+
+        .notification-item.unread .notification-dot {
+            display: block
+        }
+
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+            color: #666
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: .3
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-20px);
+                opacity: 0
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1
+            }
+        }
+
+        .notification-item.new {
+            animation: slideDown .3s ease
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>📱 Notification Center</h1>
+        <div class="notification-bell">
+            <div class="bell-icon"></div>
+            <span class="notification-count" id="totalCount">0</span>
+        </div>
+    </div>
+    <div id="status">Status: <span id="connectionStatus" class="disconnected">Disconnected</span></div>
+    <div class="notifications-container">
+        <div class="notifications-header">Notifications <span id="unreadCount"
+                style="color:#666;font-weight:400;font-size:16px">(0)</span></div>
+        <div class="notifications-list" id="notificationsList">
+            <div class="empty-state">
+                <div class="empty-state-icon">🔔</div>
+                <div>No notifications yet</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // WebSocket connection and DOM element references
+        const ws = new WebSocket("ws://localhost:5151/ws"),
+            statusEl = document.getElementById('connectionStatus'),
+            listEl = document.getElementById('notificationsList'),
+            totalEl = document.getElementById('totalCount'),
+            unreadEl = document.getElementById('unreadCount');
+        let notifications = [], unreadCount = 0;
+
+        // WebSocket event handlers
+        ws.onopen = () => { statusEl.textContent = 'Connected'; statusEl.className = 'connected' };
+        ws.onmessage = e => { try { const d = JSON.parse(e.data); if (d.buttonNumber) { addNotification(d.buttonNumber); playSound() } } catch { } };
+        ws.onclose = () => { statusEl.textContent = 'Disconnected'; statusEl.className = 'disconnected' };
+
+        // Add new notification to the list
+        function addNotification(num) {
+            notifications.unshift({ id: Date.now(), buttonNumber: num, time: new Date(), unread: true });
+            unreadCount++;
+            updateUI();
+            renderNotifications();
+        }
+
+        // Mark notification as read when clicked
+        function markAsRead(id) {
+            const n = notifications.find(x => x.id === id);
+            if (n && n.unread) { n.unread = false; unreadCount--; updateUI(); renderNotifications() }
+        }
+
+        // Update notification badge and counter
+        function updateUI() {
+            if (unreadCount > 0) { totalEl.textContent = unreadCount > 99 ? '99+' : unreadCount; totalEl.classList.add('visible') }
+            else totalEl.classList.remove('visible');
+            unreadEl.textContent = `(${unreadCount})`;
+        }
+
+        // Render all notifications to the DOM
+        function renderNotifications() {
+            if (!notifications.length) { listEl.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🔔</div><div>No notifications yet</div></div>'; return }
+            listEl.innerHTML = notifications.map(n => {
+                // Calculate time ago
+                const s = Math.floor((new Date() - n.time) / 1000);
+                const t = s < 60 ? 'Just now' : s < 3600 ? `${Math.floor(s / 60)}m ago` : s < 86400 ? `${Math.floor(s / 3600)}h ago` : `${Math.floor(s / 86400)}d ago`;
+                return `<div class="notification-item ${n.unread ? 'unread new' : ''}" onclick="markAsRead(${n.id})">
+<div class="notification-avatar">${n.buttonNumber}</div>
+<div class="notification-content">
+<div class="notification-text"><strong>Button ${n.buttonNumber}</strong> sent you a notification</div>
+<div class="notification-time">${t}</div>
+</div>
+<div class="notification-dot"></div>
+</div>`}).join('');
+        }
+
+        // Play notification sound using custom audio file
+        function playSound() {
+            // Using custom audio file
+            const audio = new Audio('../يارياض يا رياض محمد هنيدى (mp3cut.net).mp3');
+            audio.volume = 0.5; // Adjust volume (0.0 to 1.0)
+            audio.play().catch(e => console.log('Audio play failed:', e));
+        }
+
+        // Update time stamps every minute
+        setInterval(() => { if (notifications.length) renderNotifications() }, 60000);
+    </script>
+</body>
+
+</html>
