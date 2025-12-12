@@ -39,6 +39,7 @@ WebSockets-SingleR/
 ## 🔧 How It Works
 
 ### Server-Side (`Program.cs`)
+
 1. **WebSocket Endpoint**: Listens on `/ws` for WebSocket connections
 2. **Connection Management**: Maintains a list of all active WebSocket connections
 3. **Background Task**: Runs a continuous task that:
@@ -48,6 +49,7 @@ WebSockets-SingleR/
 4. **Message Handling**: Receives messages from clients and sends acknowledgments
 
 ### Client-Side (`index.html`)
+
 1. **WebSocket Connection**: Connects to the server's WebSocket endpoint
 2. **Notification Display**: Shows incoming notifications in a bell dropdown
 3. **UI Features**:
@@ -60,18 +62,22 @@ WebSockets-SingleR/
 ## 🚦 Getting Started
 
 ### Prerequisites
+
 - .NET 10.0 SDK installed
 - A modern web browser with WebSocket support
 
 ### Running the Application
 
 1. **Start the Server**:
+
    ```bash
    dotnet run
    ```
+
    The server will start on `http://localhost:5000` (or the configured port)
 
 2. **Open the Client**:
+
    - Navigate to the `WebSocketOpen` folder
    - Open `index.html` in your browser
    - Or update the WebSocket URL in `index.html` to point to your server
@@ -103,6 +109,7 @@ Client                          Server
 ## 🎯 Key Code Highlights
 
 ### Server: Sending Notifications to All Clients
+
 ```csharp
 foreach (var ws in webSocketConnections.ToList())
 {
@@ -114,10 +121,11 @@ foreach (var ws in webSocketConnections.ToList())
 ```
 
 ### Client: Handling Incoming Messages
+
 ```javascript
 socket.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    addNotification(data);
+  const data = JSON.parse(event.data);
+  addNotification(data);
 };
 ```
 
@@ -131,6 +139,7 @@ socket.onmessage = (event) => {
 ## 🎨 UI Customization
 
 The notification interface can be customized by modifying the CSS in `index.html`:
+
 - Colors and themes
 - Animation timings
 - Badge styles

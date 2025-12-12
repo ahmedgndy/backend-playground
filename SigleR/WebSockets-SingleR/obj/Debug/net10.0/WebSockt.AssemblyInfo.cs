@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebSockt")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+fe49adf60597042d6f3bbc655167025ea45fc385")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2897baac4953c90c8debc1f97d1b2bac222c3e6a")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebSockt")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebSockt")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

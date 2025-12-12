@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Notifications</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: light dark;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 10% 20%, #2b5876 0%, #4e4376 40%, #0d1117 100%);
+            color: #e6edf3;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            width: min(900px, 92vw);
+            background: rgba(13, 17, 23, 0.82);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 22px 24px 28px;
+            box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 26px;
+            letter-spacing: -0.02em;
+        }
+
+        p.sub {
+            margin: 0 0 20px;
+            color: #9ba3af;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #9ba3af;
+            font-size: 13px;
+        }
+
+        input,
+        button,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: #e6edf3;
+            padding: 12px;
+            font-size: 15px;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 88px;
+            resize: vertical;
+        }
+
+        button {
+            cursor: pointer;
+            background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+            border: none;
+            font-weight: 700;
+            letter-spacing: 0.01em;
+            box-shadow: 0 10px 30px rgba(33, 147, 176, 0.35);
+            transition: transform 0.1s ease, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 12px 34px rgba(33, 147, 176, 0.45);
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .stack {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .pill {
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+        }
+
+        .notifications {
+            margin-top: 20px;
+            display: grid;
+            gap: 10px;
+        }
+
+        .notification {
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        .notification small {
+            color: #9ba3af;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .inline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #f87171;
+            box-shadow: 0 0 0 4px rgba(248, 113, 113, 0.15);
+            transition: background 0.2s, box-shadow 0.2s;
+        }
+
+        .status-dot.on {
+            background: #4ade80;
+            box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.18);
+        }
+
+        code {
+            background: rgba(255, 255, 255, 0.06);
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        .footer {
+            margin-top: 18px;
+            color: #9ba3af;
+            font-size: 13px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <h1>SignalR Notifications</h1>
+        <p class="sub">Connect with a <code>userId</code>, receive your last 4 notifications instantly, and see live
+            pushes in both directions.</p>
+
+        <div class="grid">
+            <div>
+                <label for="userId">Your User Id</label>
+                <input id="userId" placeholder="e.g. alice" value="alice" />
+            </div>
+            <div>
+                <label>Status</label>
+                <div class="stack">
+                    <div id="statusDot" class="status-dot"></div>
+                    <div id="statusText">Disconnected</div>
+                </div>
+            </div>
+            <div style="align-self:end">
+                <button id="connectBtn">Connect</button>
+            </div>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 18px 0;" />
+
+        <div class="grid">
+            <div>
+                <label for="targetUser">Send to user</label>
+                <input id="targetUser" placeholder="bob" value="bob" />
+            </div>
+            <div>
+                <label for="message">Message</label>
+                <textarea id="message" placeholder="Type a notification"></textarea>
+            </div>
+            <div style="align-self:end">
+                <button id="sendBtn" disabled>Send via hub</button>
+            </div>
+        </div>
+
+        <div class="notifications" id="notifications"></div>
+
+        <div class="footer">Tip: open this page in two tabs with different <code>userId</code> values to watch real-time
+            fan-out.</div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@8.0.0/dist/browser/signalr.min.js"></script>
+    <script>
+        const connectBtn = document.getElementById('connectBtn');
+        const sendBtn = document.getElementById('sendBtn');
+        const userIdInput = document.getElementById('userId');
+        const targetUser = document.getElementById('targetUser');
+        const message = document.getElementById('message');
+        const notifications = document.getElementById('notifications');
+        const statusDot = document.getElementById('statusDot');
+        const statusText = document.getElementById('statusText');
+
+        let connection;
+
+        const addNotification = (title, body) => {
+            const card = document.createElement('div');
+            card.className = 'notification';
+            const time = new Date().toLocaleTimeString();
+            card.innerHTML = `<small>${time}</small><strong>${title}</strong><div>${body}</div>`;
+            notifications.prepend(card);
+        };
+
+        const setStatus = (text, on) => {
+            statusText.textContent = text;
+            statusDot.classList.toggle('on', on);
+            connectBtn.textContent = on ? 'Disconnect' : 'Connect';
+            sendBtn.disabled = !on;
+        };
+
+        const buildConnection = () => new signalR.HubConnectionBuilder()
+            .withUrl(`/hubs/notifications?userId=${encodeURIComponent(userIdInput.value.trim())}`)
+            .withAutomaticReconnect()
+            .build();
+
+        const connect = async () => {
+            if (!userIdInput.value.trim()) {
+                alert('Please enter a user id');
+                return;
+            }
+            connection = buildConnection();
+
+            connection.on('SeedNotifications', payload => {
+                console.log('SeedNotifications received:', payload);
+                if (Array.isArray(payload)) {
+                    payload.forEach(n => addNotification('Seeded', n.message || n.Message || 'No message'));
+                }
+            });
+
+            connection.on('ReceiveNotification', n => {
+                console.log('ReceiveNotification received:', n);
+                addNotification(`New for ${n.userId || n.UserId || 'unknown'}`, n.message || n.Message || 'No message');
+            });
+
+            connection.onreconnected(() => setStatus('Connected (reconnected)', true));
+            connection.onclose(() => setStatus('Disconnected', false));
+
+            try {
+                await connection.start();
+                setStatus('Connected', true);
+                console.log('Connected successfully');
+            } catch (error) {
+                console.error('Connection error:', error);
+                addNotification('Error', `Failed to connect: ${error.message}`);
+                setStatus('Connection failed', false);
+            }
+        };
+
+        const disconnect = async () => {
+            if (connection) {
+                await connection.stop();
+                connection = null;
+            }
+            setStatus('Disconnected', false);
+        };
+
+        connectBtn.addEventListener('click', () => {
+            if (connection && connection.state === signalR.HubConnectionState.Connected) {
+                disconnect();
+            } else {
+                connect();
+            }
+        });
+
+        sendBtn.addEventListener('click', async () => {
+            if (!connection || connection.state !== signalR.HubConnectionState.Connected) {
+                addNotification('Error', 'Not connected to hub');
+                return;
+            }
+            try {
+                await connection.invoke('SendNotification', targetUser.value.trim(), message.value.trim() || '👋 Hello!');
+                message.value = '';
+            } catch (error) {
+                console.error('Send error:', error);
+                addNotification('Error', `Failed to send: ${error.message}`);
+            }
+        });
+
+        apiBtn.addEventListener('click', async () => {
+            if (!targetUser.value.trim()) {
+                alert('Please enter a target user');
+                return;
+            }
+            try {
+                const response = await fetch('/api/notifications', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: targetUser.value.trim(), message: message.value.trim() || '👋 Hello from API!' })
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                message.value = '';
+                addNotification('Sent via API', 'Notification delivered');
+            } catch (error) {
+                console.error('API error:', error);
+                addNotification('Error', `API call failed: ${error.message}`);
+            }
+        });
+    </script>
+</body>
+
+</html>

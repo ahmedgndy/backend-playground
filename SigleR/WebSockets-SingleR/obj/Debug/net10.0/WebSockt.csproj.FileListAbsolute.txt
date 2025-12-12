@@ -26,3 +26,31 @@ C:\Users\El-Wattaneya\Desktop\learning backend\SigleR\WebSockt\obj\Debug\net10.0
 C:\Users\El-Wattaneya\Desktop\learning backend\SigleR\WebSockt\obj\Debug\net10.0\WebSockt.pdb
 C:\Users\El-Wattaneya\Desktop\learning backend\SigleR\WebSockt\obj\Debug\net10.0\WebSockt.genruntimeconfig.cache
 C:\Users\El-Wattaneya\Desktop\learning backend\SigleR\WebSockt\obj\Debug\net10.0\ref\WebSockt.dll
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\appsettings.Development.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\appsettings.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\WebSockt.staticwebassets.endpoints.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\WebSockt.exe
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\WebSockt.deps.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\WebSockt.runtimeconfig.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\WebSockt.dll
+D:\Backend-playGound\SigleR\WebSockets-SingleR\bin\Debug\net10.0\WebSockt.pdb
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\rpswa.dswa.cache.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.GeneratedMSBuildEditorConfig.editorconfig
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.AssemblyInfoInputs.cache
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.AssemblyInfo.cs
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.csproj.CoreCompileInputs.cache
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.MvcApplicationPartsAssemblyInfo.cache
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.sourcelink.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\rjimswa.dswa.cache.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\scopedcss\bundle\WebSockt.styles.css
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\staticwebassets.build.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\staticwebassets.build.json.cache
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\staticwebassets.development.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\staticwebassets.build.endpoints.json
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.dll
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\refint\WebSockt.dll
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.pdb
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\WebSockt.genruntimeconfig.cache
+D:\Backend-playGound\SigleR\WebSockets-SingleR\obj\Debug\net10.0\ref\WebSockt.dll
