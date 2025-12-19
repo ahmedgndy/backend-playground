@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        @keyframes celebration {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        .celebrate {
+            animation: celebration 0.6s ease-in-out 3;
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #667eea;
+            position: absolute;
+            animation: fall 3s linear;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <section class="card" style="text-align: center; padding: 3rem;">
+            <h1 class="celebrate" style="font-size: 5rem; margin-bottom: 1rem;">🎉</h1>
+            <h2 style="color: #10b981; font-size: 2rem; margin-bottom: 0.5rem;">Payment Successful!</h2>
+            <p style="color: #888; margin: 1rem 0; font-size: 1.1rem;">Your payment has been processed successfully.</p>
+            <p style="color: #666; font-size: 0.9rem; margin-bottom: 1.5rem;">Redirecting to dashboard in <span
+                    id="countdown">3</span> seconds...</p>
+            <a href="/" class="btn primary" style="display: inline-block; text-decoration: none;">Back to Dashboard
+                Now</a>
+        </section>
+    </div>
+
+    <script>
+        // Create confetti effect
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.background = ['#667eea', '#764ba2', '#f093fb', '#10b981', '#f59e0b'][Math.floor(Math.random() * 5)];
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(confetti);
+        }
+
+        // Auto-redirect countdown
+        let seconds = 3;
+        const countdownEl = document.getElementById('countdown');
+
+        const interval = setInterval(() => {
+            seconds--;
+            countdownEl.textContent = seconds;
+
+            if (seconds <= 0) {
+                clearInterval(interval);
+                window.location.href = '/';
+            }
+        }, 1000);
+    </script>
+</body>
+
+</html>

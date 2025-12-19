@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Payment Test UI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>🔥 Stripe Payment Test UI</h1>
+            <p class="subtitle">Serverless Payment Integration - Stripe is the Single Source of Truth</p>
+            <div
+                style="margin-top: 1rem; padding: 1rem; background: rgba(102, 126, 234, 0.1); border-radius: 8px; border-left: 3px solid #667eea;">
+                <p style="margin: 0; font-size: 0.85rem; color: #aaa;">
+                    <strong>Quick Start:</strong>
+                    1️⃣ Create Customer →
+                    2️⃣ Subscribe to a Plan →
+                    3️⃣ Add Payment Method →
+                    4️⃣ Set as Default
+                </p>
+            </div>
+        </header>
+
+        <!-- Test Cards Reference -->
+        <section class="card info-card">
+            <h2>📝 Stripe Test Cards</h2>
+            <div class="test-cards">
+                <div class="test-card">
+                    <span class="card-number">4242 4242 4242 4242</span>
+                    <span class="card-desc">✅ Success</span>
+                </div>
+                <div class="test-card">
+                    <span class="card-number">4000 0000 0000 3220</span>
+                    <span class="card-desc">🔐 3D Secure</span>
+                </div>
+                <div class="test-card">
+                    <span class="card-number">4000 0000 0000 9995</span>
+                    <span class="card-desc">❌ Declined</span>
+                </div>
+            </div>
+            <p class="hint">Use any future expiry date and any 3-digit CVC</p>
+        </section>
+
+        <!-- Customer Section -->
+        <section class="card">
+            <h2>👤 Customer Management</h2>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="test@example.com">
+            </div>
+            <div class="form-group">
+                <label for="name">Name (optional)</label>
+                <input type="text" id="name" placeholder="John Doe">
+            </div>
+            <div class="button-group">
+                <button onclick="createCustomer()" class="btn primary">Create Customer</button>
+                <button onclick="getCustomer()" class="btn secondary">Get Customer</button>
+            </div>
+            <div id="customer-result" class="result"></div>
+        </section>
+
+        <!-- Payment Methods Section -->
+        <section class="card">
+            <h2>💳 Payment Methods</h2>
+            <div class="form-group">
+                <label for="customerId">Customer ID</label>
+                <input type="text" id="customerId" placeholder="cus_xxxxx">
+            </div>
+            <div class="button-group">
+                <button onclick="addPaymentMethod()" class="btn primary">Add Payment Method</button>
+                <button onclick="listPaymentMethods()" class="btn secondary">List All</button>
+                <button onclick="getDefaultPaymentMethod()" class="btn secondary">Get Default</button>
+            </div>
+            <div id="payment-methods-result" class="result"></div>
+
+            <div class="form-group" style="margin-top: 1rem;">
+                <label for="paymentMethodId">Set Default Payment Method ID</label>
+                <input type="text" id="paymentMethodId" placeholder="pm_xxxxx">
+                <button onclick="setDefaultPaymentMethod()" class="btn warning" style="margin-top: 0.5rem;">Set as
+                    Default</button>
+            </div>
+        </section>
+
+        <!-- Subscription Section -->
+        <section class="card">
+            <h2>📦 Subscription Plans</h2>
+            <p class="hint" style="margin-bottom: 1rem;">First subscribe to a plan, then you can change it later</p>
+            <div class="plans">
+                <div class="plan" id="plan-starter">
+                    <h3>Starter</h3>
+                    <p class="price">$9.99/mo</p>
+                    <p class="product-id">prod_TapKAi79CuHQH0</p>
+                    <button onclick="checkout(1)" class="btn primary">Subscribe Now</button>
+                </div>
+                <div class="plan featured" id="plan-pro">
+                    <span class="badge">Popular</span>
+                    <h3>Professional</h3>
+                    <p class="price">$29.99/mo</p>
+                    <p class="product-id">prod_TawnErWStdDwne</p>
+                    <button onclick="checkout(2)" class="btn primary">Subscribe Now</button>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-top: 1.5rem;">
+                <label>📊 View Current Subscription</label>
+                <button onclick="getUserPlan()" class="btn secondary">Check My Plan</button>
+            </div>
+            <div id="plan-result" class="result"></div>
+
+            <div class="form-group" style="margin-top: 1rem;">
+                <label>🔄 Change Subscription (requires active subscription)</label>
+                <select id="newPlan">
+                    <option value="1">Starter Plan</option>
+                    <option value="2">Professional Plan</option>
+                </select>
+                <button onclick="changePlan()" class="btn warning" style="margin-top: 0.5rem;">Update
+                    Subscription</button>
+            </div>
+        </section>
+
+        <!-- Payments Section -->
+        <section class="card">
+            <h2>💰 Payment History</h2>
+            <button onclick="getLastPayment()" class="btn secondary">View Last Payment</button>
+            <div id="payment-result" class="result"></div>
+        </section>
+
+        <!-- API Endpoints Reference -->
+        <section class="card">
+            <h2>🔗 API Endpoints</h2>
+            <div class="endpoints">
+                <code>POST /api/payment/customer</code>
+                <code>GET /api/payment/customer/{email}</code>
+                <code>POST /api/payment/payment-method/setup/{customerId}</code>
+                <code>GET /api/payment/payment-methods/{customerId}</code>
+                <code>GET /api/payment/payment-method/default/{customerId}</code>
+                <code>PUT /api/payment/payment-method/default/{customerId}</code>
+                <code>POST /api/payment/checkout/{customerId}?plan=1|2</code>
+                <code>GET /api/payment/plan/{email}</code>
+                <code>PUT /api/payment/plan/{email}</code>
+                <code>GET /api/payment/last-payment/{customerId}</code>
+            </div>
+            <p class="hint" style="margin-top: 1rem;">
+                <a href="/swagger" target="_blank">Open Swagger UI →</a>
+            </p>
+        </section>
+    </div>
+
+    <script>
+        const API_BASE = '/api/payment';
+
+        // Helper to show results
+        function showResult(elementId, data, isError = false) {
+            const el = document.getElementById(elementId);
+            el.className = 'result ' + (isError ? 'error' : 'success');
+            el.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+        }
+
+        // Customer APIs
+        async function createCustomer() {
+            const email = document.getElementById('email').value;
+            const name = document.getElementById('name').value;
+
+            if (!email) {
+                showResult('customer-result', { error: 'Email is required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/customer`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, name: name || null })
+                });
+                const data = await res.json();
+                showResult('customer-result', data, !res.ok);
+
+                if (res.ok && data.customerId) {
+                    document.getElementById('customerId').value = data.customerId;
+                }
+            } catch (err) {
+                showResult('customer-result', { error: err.message }, true);
+            }
+        }
+
+        async function getCustomer() {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                showResult('customer-result', { error: 'Email is required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/customer/${encodeURIComponent(email)}`);
+                const data = await res.json();
+                showResult('customer-result', data, !res.ok);
+
+                if (res.ok && data.customerId) {
+                    document.getElementById('customerId').value = data.customerId;
+                }
+            } catch (err) {
+                showResult('customer-result', { error: err.message }, true);
+            }
+        }
+
+        // Payment Method APIs
+        async function addPaymentMethod() {
+            const customerId = document.getElementById('customerId').value;
+            if (!customerId) {
+                showResult('payment-methods-result', { error: 'Customer ID is required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/payment-method/setup/${customerId}`, {
+                    method: 'POST'
+                });
+                const data = await res.json();
+
+                if (res.ok && data.url) {
+                    window.location.href = data.url;
+                } else {
+                    showResult('payment-methods-result', data, true);
+                }
+            } catch (err) {
+                showResult('payment-methods-result', { error: err.message }, true);
+            }
+        }
+
+        async function listPaymentMethods() {
+            const customerId = document.getElementById('customerId').value;
+            if (!customerId) {
+                showResult('payment-methods-result', { error: 'Customer ID is required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/payment-methods/${customerId}`);
+                const data = await res.json();
+                showResult('payment-methods-result', data, !res.ok);
+            } catch (err) {
+                showResult('payment-methods-result', { error: err.message }, true);
+            }
+        }
+
+        async function getDefaultPaymentMethod() {
+            const customerId = document.getElementById('customerId').value;
+            if (!customerId) {
+                showResult('payment-methods-result', { error: 'Customer ID is required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/payment-method/default/${customerId}`);
+                const data = await res.json();
+                showResult('payment-methods-result', data, !res.ok);
+            } catch (err) {
+                showResult('payment-methods-result', { error: err.message }, true);
+            }
+        }
+
+        async function setDefaultPaymentMethod() {
+            const customerId = document.getElementById('customerId').value;
+            const paymentMethodId = document.getElementById('paymentMethodId').value;
+
+            if (!customerId || !paymentMethodId) {
+                showResult('payment-methods-result', { error: 'Customer ID and Payment Method ID are required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/payment-method/default/${customerId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ paymentMethodId })
+                });
+                const data = await res.json();
+                showResult('payment-methods-result', data, !res.ok);
+            } catch (err) {
+                showResult('payment-methods-result', { error: err.message }, true);
+            }
+        }
+
+        // Subscription APIs
+        async function checkout(plan) {
+            const customerId = document.getElementById('customerId').value;
+            if (!customerId) {
+                showResult('plan-result', { error: 'Customer ID is required - create customer first' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/checkout/${customerId}?plan=${plan}`, {
+                    method: 'POST'
+                });
+                const data = await res.json();
+
+                if (res.ok && data.url) {
+                    window.location.href = data.url;
+                } else {
+                    showResult('plan-result', data, true);
+                }
+            } catch (err) {
+                showResult('plan-result', { error: err.message }, true);
+            }
+        }
+
+        async function getUserPlan() {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                showResult('plan-result', { error: 'Email is required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/plan/${encodeURIComponent(email)}`);
+                const data = await res.json();
+                showResult('plan-result', data, !res.ok);
+            } catch (err) {
+                showResult('plan-result', { error: err.message }, true);
+            }
+        }
+
+        async function changePlan() {
+            const email = document.getElementById('email').value;
+            const newPlan = parseInt(document.getElementById('newPlan').value);
+
+            if (!email) {
+                showResult('plan-result', { error: 'Email is required to change plan' }, true);
+                return;
+            }
+
+            if (!confirm(`Change subscription plan? This will update your active subscription immediately.`)) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/plan/${encodeURIComponent(email)}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ newPlan })
+                });
+                const data = await res.json();
+
+                if (res.ok) {
+                    showResult('plan-result', { success: true, message: data.message || 'Plan updated successfully!' });
+                } else {
+                    showResult('plan-result', data, true);
+                }
+            } catch (err) {
+                showResult('plan-result', { error: err.message }, true);
+            }
+        }
+
+        // Payment History
+        async function getLastPayment() {
+            const customerId = document.getElementById('customerId').value;
+            if (!customerId) {
+                showResult('payment-result', { error: 'Customer ID is required' }, true);
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_BASE}/last-payment/${customerId}`);
+                const data = await res.json();
+                showResult('payment-result', data, !res.ok);
+            } catch (err) {
+                showResult('payment-result', { error: err.message }, true);
+            }
+        }
+    </script>
+</body>
+
+</html>

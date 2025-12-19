@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Entity Framework Core with SQLite -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    
+    <!-- Swagger/OpenAPI -->
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
+    
+    <!-- Redis for optional ephemeral OTP storage -->
+    <PackageReference Include="StackExchange.Redis" Version="2.8.16" />
+    
+    <!-- Email Services -->
+    <PackageReference Include="SendGrid" Version="9.29.3" />
+    <PackageReference Include="MailKit" Version="4.8.0" />
+    
+    <!-- Rate Limiting (built-in for .NET 7+) -->
+    <PackageReference Include="System.Threading.RateLimiting" Version="9.0.0" />
+  </ItemGroup>
+
+</Project>
